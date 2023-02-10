@@ -1,0 +1,42 @@
+log_dir: ./log/model/
+data:
+  data_file: ./data/SonTay.csv
+  split_point_outer: 0.05
+  split_point_inner: 0.4
+  norm_method: min_max
+  pred_factor: q
+  cols_x: #column used for input - the SSA-filtered Q and H
+    - 0
+    - 1
+  cols_y: #column used as groundtruth during training process - the SSA-filtered Q and H
+    - 0
+    - 1
+  cols_gt: #column used as groudtruth during test phase - the raw Q and H
+    - 0
+    - 1
+  window_size: 30
+  target_timestep: 7 # the actual number of timestep output by model - only 1 time step
+  time_step_eval: 7 # the roll prediction timestep - use for multistep prediction
+model:
+  child:
+    num: 4 # number of children
+    epoch: 
+      - 25
+      - 50
+      - 75
+      - 5
+    dropout: 
+      - 0
+      - 0
+      - 0
+      - 0
+    batch_size: [128, 128, 128, 128]
+  epochs_out: 400
+  in_dim: 2
+  out_dim: 2
+  patience: 50
+  batch_size: 128
+  dropout: 0
+ssa:
+  default_n: 10 # default window size
+  sigma_lst: [0,1,2,3,4] # default_sigma_lst
